@@ -7,8 +7,9 @@ from collections.abc import Callable
 import typer
 
 from scruft import _commands, _logo
+from scruft._version import __version__
 
-app = typer.Typer(help=_logo.ascii_art, no_args_is_help=True, add_completion=False)
+app = typer.Typer(help=f"Scruft {__version__}", no_args_is_help=True, add_completion=False)
 
 
 def _get_help_string(function: Callable[[Any], Any]) -> str:
