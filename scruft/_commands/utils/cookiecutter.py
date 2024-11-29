@@ -1,4 +1,5 @@
 import json
+import logging
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
@@ -12,6 +13,8 @@ from scruft.exceptions import (
     InvalidCookiecutterRepository,
     UnableToFindCookiecutterTemplate,
 )
+
+_LOGGER = logging.getLogger(__name__)
 
 CookiecutterContext = dict[str, Any]
 
@@ -47,6 +50,7 @@ def get_cookiecutter_repo(
     checkout: str | None = None,
     **clone_kwargs: Any,
 ) -> Repo:
+    _LOGGER.debug("Cloning %s to %s", template_git_url, cookiecutter_template_dir)
     try:
         repo = Repo.clone_from(
             template_git_url, cookiecutter_template_dir, **clone_kwargs
