@@ -199,10 +199,8 @@ def test_directory_and_checkout(tmpdir):
     ],
 )
 def test_diff_has_diff(
-    exit_code, isatty, expect_reproducible_diff, expected_return_value, capfd, mocker, tmpdir
+    exit_code, isatty, expect_reproducible_diff, expected_return_value, capfd, tmpdir
 ):
-    mocker.patch.object(sys.stdout, "isatty", return_value=isatty)
-
     project_dir = scruft.create(
         "https://github.com/cruft/cookiecutter-test", Path(tmpdir), directory="dir", checkout="diff"
     )
@@ -255,7 +253,7 @@ index be6a56b..1fc03a9 100644
 
 
 @pytest.mark.parametrize("exit_code", [(False,), (True,)])
-def test_diff_no_diff(exit_code, capfd, mocker, tmpdir):
+def test_diff_no_diff(exit_code, capfd, tmpdir):
     project_dir = scruft.create(
         "https://github.com/cruft/cookiecutter-test", Path(tmpdir), directory="dir", checkout="diff"
     )
