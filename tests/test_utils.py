@@ -1,4 +1,5 @@
 from pathlib import Path
+import logging
 
 import pytest
 
@@ -94,7 +95,7 @@ def test_remove_paths_folder(tmp_path: Path):
     assert not (repo0 / "file").exists()
 
 
-def test_remove_paths_with_glob_pattern_and_string(tmp_path: Path):
+def test_remove_paths_with_glob_pattern_and_string(tmp_path: Path, caplog):
     repo0 = tmp_path / "repo0"
     (repo0 / "tests").mkdir(parents=True)
 
@@ -102,17 +103,18 @@ def test_remove_paths_with_glob_pattern_and_string(tmp_path: Path):
     (repo0 / "tests" / "test0.py").touch()
     (repo0 / "tests" / "test1.py").touch()
 
-    with pytest.warns(None) as warn_record:
+    with caplog.at_level(logging.WARNING):
         utils.generate._remove_paths(repo0, {5})  # type: ignore
-    assert len(warn_record) != 0, "a warning should have been called as typing was off"
+    assert len(caplog.records) != 0, "a warning should have been called as typing was off"
     assert (repo0 / "tests" / "test0.py").exists()
     assert (repo0 / "tests" / "test1.py").exists()
 
 
-def test_warn_if_cant_read_pyproject_toml(monkeypatch):
+def test_warn_if_cant_read_pyproject_toml(monkeypatch, caplog):
     monkeypatch.setattr(utils.generate, "tomllib", None)
-    with pytest.warns(UserWarning, match="`toml` package is not installed"):
+    with caplog.at_level(logging.WARNING):
         utils.generate._get_skip_paths({}, Path(__file__))
+        assert "`toml` package is not installed" in caplog.text
 
 
 def test_get_extra_context_from_file():

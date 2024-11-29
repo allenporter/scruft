@@ -1,10 +1,10 @@
 import os
 import stat
 import sys
+import logging
 from pathlib import Path
 from shutil import move, rmtree
 from typing import Optional, Set, Union
-from warnings import warn
 
 from cookiecutter.generate import generate_files
 from git import Repo
@@ -12,6 +12,8 @@ from git import Repo
 from .cookiecutter import CookiecutterContext, generate_cookiecutter_context
 from .cruft import CruftState
 from .iohelper import AltTemporaryDirectory
+
+_LOGGER = logging.getLogger(__name__)
 
 if not sys.version_info >= (3, 11):
     try:
@@ -111,7 +113,7 @@ def _get_skip_paths(cruft_state: CruftState, pyproject_file: Path) -> Set[Path]:
         pyproject_cruft = tomllib.loads(pyproject_file.read_text()).get("tool", {}).get("cruft", {})
         skip_cruft.extend(pyproject_cruft.get("skip", []))
     elif pyproject_file.is_file():
-        warn(
+        _LOGGER.warning(
             "pyproject.toml is present in repo, but python version is < 3.11 and "
             "`toml` package is not installed. Cruft configuration may be ignored."
         )
@@ -162,7 +164,7 @@ def _remove_paths(root: Path, paths_to_remove: Set[Union[Path, str]]):
         elif isinstance(path_to_remove, str):  # assumes the string is a glob-pattern
             abs_paths_to_remove += list(root.glob(path_to_remove))
         else:
-            warn(f"{path_to_remove} is not a Path object or a string glob-pattern")
+            _LOGGER.warning("%s is not a Path object or a string glob-pattern", path_to_remove)
 
     for path in abs_paths_to_remove:
         _remove_single_path(path)
