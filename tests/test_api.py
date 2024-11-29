@@ -16,12 +16,12 @@ from scruft._commands import utils
 
 def test_invalid_cookiecutter_repo(tmpdir):
     with pytest.raises(exceptions.InvalidCookiecutterRepository):
-        scruft.create("DNE", Path(tmpdir))
+        scruft.create("invalid-rep", Path(tmpdir))
 
 
 def test_invalid_cookiecutter_reference(tmpdir):
     with pytest.raises(exceptions.InvalidCookiecutterRepository):
-        scruft.create("https://github.com/cruft/cookiecutter-test", Path(tmpdir), checkout="DNE")
+        scruft.create("https://github.com/cruft/cookiecutter-test", Path(tmpdir), checkout="invalid-reference")
 
 
 def test_no_cookiecutter_dir(tmpdir):
