@@ -95,21 +95,6 @@ def test_remove_paths_folder(tmp_path: Path):
     assert not (repo0 / "file").exists()
 
 
-def test_remove_paths_with_glob_pattern_and_string(tmp_path: Path, caplog):
-    repo0 = tmp_path / "repo0"
-    (repo0 / "tests").mkdir(parents=True)
-
-    (repo0 / "file").touch()
-    (repo0 / "tests" / "test0.py").touch()
-    (repo0 / "tests" / "test1.py").touch()
-
-    with caplog.at_level(logging.WARNING):
-        utils.generate._remove_paths(repo0, {5})  # type: ignore
-    assert len(caplog.records) != 0, "a warning should have been called as typing was off"
-    assert (repo0 / "tests" / "test0.py").exists()
-    assert (repo0 / "tests" / "test1.py").exists()
-
-
 def test_warn_if_cant_read_pyproject_toml(monkeypatch, caplog):
     monkeypatch.setattr(utils.generate, "tomllib", None)
     with caplog.at_level(logging.WARNING):

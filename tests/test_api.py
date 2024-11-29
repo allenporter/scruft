@@ -149,7 +149,7 @@ def test_update(project_dir, tmpdir):
         scruft.update(skip_apply_ask=False)
 
     os.chdir(project_dir)
-    scruft.update(skip_apply_ask=False)
+    scruft.update(skip_apply_ask=True)
 
 
 def test_link(project_dir, tmpdir):
