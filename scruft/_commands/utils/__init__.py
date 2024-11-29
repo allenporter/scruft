@@ -1,5 +1,3 @@
-from functools import wraps
-
 from . import cookiecutter, cruft, diff, generate, iohelper
 
 
