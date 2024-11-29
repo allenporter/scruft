@@ -6,7 +6,7 @@ from collections.abc import Callable
 
 import typer
 
-from scruft import _commands, _logo
+from scruft import _commands
 from scruft._version import __version__
 
 app = typer.Typer(help=f"Scruft {__version__}", no_args_is_help=True, add_completion=False)
