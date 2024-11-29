@@ -7,9 +7,9 @@ from textwrap import dedent
 import pytest
 from typer.testing import CliRunner
 
-import cruft
-from cruft._cli import app
-from cruft._commands import utils
+import scruft
+from scruft._cli import app
+from scruft._commands import utils
 
 
 @pytest.fixture
@@ -21,14 +21,14 @@ def cruft_runner():
 @pytest.fixture
 def cookiecutter_dir(tmpdir):
     yield Path(
-        cruft.create("https://github.com/cruft/cookiecutter-test", Path(tmpdir), directory="dir")
+        scruft.create("https://github.com/cruft/cookiecutter-test", Path(tmpdir), directory="dir")
     )
 
 
 @pytest.fixture
 def cookiecutter_dir_updated(tmpdir):
     yield Path(
-        cruft.create(
+        scruft.create(
             "https://github.com/cruft/cookiecutter-test",
             Path(tmpdir),
             directory="dir",
@@ -40,7 +40,7 @@ def cookiecutter_dir_updated(tmpdir):
 @pytest.fixture
 def cookiecutter_dir_hooked_git(tmpdir):
     yield Path(
-        cruft.create(
+        scruft.create(
             # See pull request!
             "https://github.com/juhuebner/cookiecutter-test",
             Path(tmpdir),
@@ -53,7 +53,7 @@ def cookiecutter_dir_hooked_git(tmpdir):
 @pytest.fixture
 def cookiecutter_dir_input(tmpdir):
     yield Path(
-        cruft.create(
+        scruft.create(
             "https://github.com/gmsantos/cookiecutter-test",
             Path(tmpdir),
             directory="dir",

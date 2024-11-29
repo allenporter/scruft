@@ -1,23 +1,11 @@
-[![cruft - Fight Back Against the Boilerplate Monster!](https://raw.github.com/cruft/cruft/master/art/logo_large.png)](https://cruft.github.io/cruft/)
-_________________
+# scruft
 
-[![PyPI version](https://badge.fury.io/py/cruft.svg)](http://badge.fury.io/py/cruft)
-[![Conda Version](https://img.shields.io/conda/vn/conda-forge/cruft.svg)](https://anaconda.org/conda-forge/cruft)
-[![Build Status](https://github.com/cruft/cruft/workflows/Run%20tests/badge.svg)](https://github.com/cruft/cruft/actions?query=workflow%3A%22Run+tests%22+branch%3Amaster)
-[![codecov](https://codecov.io/gh/cruft/cruft/branch/master/graph/badge.svg)](https://codecov.io/gh/cruft/cruft)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://timothycrosley.github.io/isort/)
-[![Join the chat at https://gitter.im/cruft/community](https://badges.gitter.im/cruft/community.svg)](https://gitter.im/cruft/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://pypi.python.org/pypi/cruft/)
-[![Downloads](https://pepy.tech/badge/cruft)](https://pepy.tech/project/cruft)
+A tool for managing consistency across repositories. This project is a fork of [cruft](https://github.com/cruft/cruft), which is a fantastic project for managing consistency across repos. However,
+the project hasn't had any updates since April 2023.
 
-#### Trending Contributors
+Below is the original readme.
 
-[![](https://sourcerer.io/fame/samj1912/cruft/cruft/images/0)](https://sourcerer.io/fame/samj1912/cruft/cruft/links/0)[![](https://sourcerer.io/fame/samj1912/cruft/cruft/images/1)](https://sourcerer.io/fame/samj1912/cruft/cruft/links/1)[![](https://sourcerer.io/fame/samj1912/cruft/cruft/images/2)](https://sourcerer.io/fame/samj1912/cruft/cruft/links/2)[![](https://sourcerer.io/fame/samj1912/cruft/cruft/images/3)](https://sourcerer.io/fame/samj1912/cruft/cruft/links/3)[![](https://sourcerer.io/fame/samj1912/cruft/cruft/images/4)](https://sourcerer.io/fame/samj1912/cruft/cruft/links/4)[![](https://sourcerer.io/fame/samj1912/cruft/cruft/images/5)](https://sourcerer.io/fame/samj1912/cruft/cruft/links/5)[![](https://sourcerer.io/fame/samj1912/cruft/cruft/images/6)](https://sourcerer.io/fame/samj1912/cruft/cruft/links/6)[![](https://sourcerer.io/fame/samj1912/cruft/cruft/images/7)](https://sourcerer.io/fame/samj1912/cruft/cruft/links/7)
-_________________
-
-[Read Latest Documentation](https://cruft.github.io/cruft/) - [Browse GitHub Code Repository](https://github.com/cruft/cruft/)
-_________________
+## Overview
 
 **cruft** allows you to maintain all the necessary boilerplate for packaging and building projects separate from the code you intentionally write.
 Fully compatible with existing [Cookiecutter](https://github.com/cookiecutter/cookiecutter) templates.
@@ -249,13 +237,3 @@ jobs:
 
             [Cruft](https://cruft.github.io/cruft/) has detected updates from the Cookiecutter repository.
 ```
-
-## Why Create cruft?
-
-Since I first saw videos of [quickly](https://www.youtube.com/watch?v=9EctXzH2dss) being used to automate Ubuntu application creation, I've had a love/hate relationship with these kinds of tools.
-I've used them for many projects and certainly seen them lead to productivity improvements. However, I've always felt like they were a double-edged sword. Sure, they would automate away the copying and pasting many would do to create projects. However, by doing so,
-they encouraged more code to be copied and pasted! Then, over time, you could easily be left with hundreds of projects that contained copy-and-pasted code with no way to easy way to update them. I created cruft to be a tool that recognized that balance between project creation and maintenance and provided mechanisms to keep built projects up-to-date.
-
-I hope you too find `cruft` useful!
-
-~Timothy Crosley
