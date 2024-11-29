@@ -3,7 +3,7 @@ from re import sub
 from subprocess import PIPE, run  # nosec
 from typing import List
 
-from cruft import exceptions
+from scruft import exceptions
 
 DIFF_SRC_PREFIX = "upstream-template-old"
 DIFF_DST_PREFIX = "upstream-template-new"

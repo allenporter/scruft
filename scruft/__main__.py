@@ -1,3 +1,3 @@
-from cruft import _cli
+from scruft import _cli
 
 _cli.app(prog_name="cruft")

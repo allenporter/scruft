@@ -1,4 +1,4 @@
-from cruft._version import __version__
+from scruft._version import __version__
 
 ascii_art = rf"""
 _____________________________________________/\\\\\___________________

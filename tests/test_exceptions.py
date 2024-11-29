@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from cruft import exceptions
+from scruft import exceptions
 
 
 def test_invalid_cookiecutter_repository():

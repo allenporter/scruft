@@ -5,7 +5,7 @@ from typing import List, Optional
 
 import typer
 
-from cruft import _commands, _logo
+from scruft import _commands, _logo
 
 app = typer.Typer(help=_logo.ascii_art, no_args_is_help=True, add_completion=False)
 

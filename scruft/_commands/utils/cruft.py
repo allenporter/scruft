@@ -4,7 +4,7 @@ from typing import Any, Dict
 
 from git import Repo
 
-from cruft.exceptions import CruftAlreadyPresent, NoCruftFound
+from scruft.exceptions import CruftAlreadyPresent, NoCruftFound
 
 CruftState = Dict[str, Any]
 

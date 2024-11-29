@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pytest
 
-from cruft import exceptions
-from cruft._commands import utils
+from scruft import exceptions
+from scruft._commands import utils
 
 
 def test_get_diff_with_add(tmp_path: Path):
