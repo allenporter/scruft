@@ -2,11 +2,12 @@ import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from time import sleep
-from typing import Optional
+from typing import Any
+from types import TracebackType
 
 
 class AltTemporaryDirectory:
-    def __init__(self, directory: Optional[str] = None):
+    def __init__(self, directory: str | None = None):
         self.tmpdir = TemporaryDirectory()
         self._extended_path = False
         self._directory = directory or ""
@@ -15,10 +16,10 @@ class AltTemporaryDirectory:
             self._extended_path = True
             sys.path.append(name)
 
-    def __enter__(self):
+    def __enter__(self) -> str:
         return self.tmpdir.name
 
-    def cleanup(self, cnt=0):
+    def cleanup(self, cnt: int = 0) -> None:
         if self._extended_path:
             name = str(Path(self.tmpdir.name) / self._directory)
             if name in sys.path:
@@ -31,5 +32,5 @@ class AltTemporaryDirectory:
             sleep(1)
             self.cleanup(cnt + 1)
 
-    def __exit__(self, exc, value, tb):
+    def __exit__(self, exc: Exception, value: Any, tb: TracebackType) -> None:
         self.cleanup()

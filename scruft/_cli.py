@@ -1,7 +1,8 @@
 """This module defines CLI interactions when using `cruft`."""
 import json
 from pathlib import Path
-from typing import List, Optional
+from typing import Any
+from collections.abc import Callable
 
 import typer
 
@@ -10,8 +11,8 @@ from scruft import _commands, _logo
 app = typer.Typer(help=_logo.ascii_art, no_args_is_help=True, add_completion=False)
 
 
-def _get_help_string(function):
-    return function.__doc__.split("\n\n")[0]
+def _get_help_string(function: Callable[[Any], Any]) -> str:
+    return function.__doc__.split("\n\n")[0] if function.__doc__ else ""
 
 
 @app.command(
@@ -22,7 +23,7 @@ def check(
     project_dir: Path = typer.Option(
         Path("."), "--project-dir", "-p", help="Path to the project directory.", show_default=False
     ),
-    checkout: Optional[str] = typer.Option(
+    checkout: str | None = typer.Option(
         None,
         "--checkout",
         "-c",
@@ -57,7 +58,7 @@ def create(
         file_okay=False,
         help="Where to output the generated project dir into",
     ),
-    config_file: Optional[Path] = typer.Option(
+    config_file: Path | None = typer.Option(
         None, help="Path to the Cookiecutter user config file", exists=True
     ),
     default_config: bool = typer.Option(
@@ -72,7 +73,7 @@ def create(
         help="A JSON string describing any extra context to pass to cookiecutter.",
         show_default=False,
     ),
-    extra_context_file: Optional[Path] = typer.Option(
+    extra_context_file: Path | None = typer.Option(
         None,
         "--extra-context-file",
         "-E",
@@ -86,7 +87,7 @@ def create(
         help="Do not prompt for template variables and only use cookiecutter.json file content",
         show_default=False,
     ),
-    directory: Optional[str] = typer.Option(
+    directory: str | None = typer.Option(
         None,
         help=(
             "Directory within repo that holds"
@@ -94,7 +95,7 @@ def create(
             " with multi templates in it"
         ),
     ),
-    checkout: Optional[str] = typer.Option(
+    checkout: str | None = typer.Option(
         None,
         "--checkout",
         "-c",
@@ -107,7 +108,7 @@ def create(
         show_default=False,
         help="Overwrite the contents of the output directory if it already exists",
     ),
-    skip: Optional[List[str]] = typer.Option(
+    skip: list[str] | None = typer.Option(
         None, "--skip", show_default=False, help="Default files/pattern to skip on update"
     ),
 ) -> None:
@@ -137,7 +138,7 @@ def link(
     project_dir: Path = typer.Option(
         Path("."), "--project-dir", "-p", help="Path to the project directory.", show_default=False
     ),
-    checkout: Optional[str] = typer.Option(
+    checkout: str | None = typer.Option(
         None,
         "--checkout",
         "-c",
@@ -150,7 +151,7 @@ def link(
         help="Do not prompt for commit hash. Use latest commit of checked out reference instead.",
         show_default=False,
     ),
-    config_file: Optional[Path] = typer.Option(
+    config_file: Path | None= typer.Option(
         None, help="Path to the Cookiecutter user config file", exists=True
     ),
     default_config: bool = typer.Option(
@@ -165,7 +166,7 @@ def link(
         help="A JSON string describing any extra context to pass to cookiecutter.",
         show_default=False,
     ),
-    directory: Optional[str] = typer.Option(
+    directory: str | None = typer.Option(
         None,
         help=(
             "Directory within repo that holds"
@@ -222,7 +223,7 @@ def update(
         help="Skip the template updates but update the cruft state",
         show_default=False,
     ),
-    checkout: Optional[str] = typer.Option(
+    checkout: str | None = typer.Option(
         None,
         "--checkout",
         "-c",
@@ -304,7 +305,7 @@ def diff(
     exit_code: bool = typer.Option(
         False, "--exit-code", "-e", help="Exit with status 1 on non-empty diff.", show_default=False
     ),
-    checkout: Optional[str] = typer.Option(
+    checkout: str | None = typer.Option(
         None,
         "--checkout",
         "-c",

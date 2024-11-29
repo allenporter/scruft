@@ -1,26 +1,24 @@
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from cookiecutter.generate import generate_files
 
 from . import utils
-from .utils import example
 from .utils.iohelper import AltTemporaryDirectory
 
 
-@example("https://github.com/timothycrosley/cookiecutter-python/")
 def create(
     template_git_url: str,
     output_dir: Path = Path("."),
-    config_file: Optional[Path] = None,
+    config_file: Path | None = None,
     default_config: bool = False,
-    extra_context: Optional[Dict[str, Any]] = None,
-    extra_context_file: Optional[Path] = None,
+    extra_context: dict[str, Any] | None = None,
+    extra_context_file: Path | None = None,
     no_input: bool = True,
-    directory: Optional[str] = None,
-    checkout: Optional[str] = None,
+    directory: str | None = None,
+    checkout: str | None = None,
     overwrite_if_exists: bool = False,
-    skip: Optional[List[str]] = None,
+    skip: list[str] | None = None,
 ) -> Path:
     """Expand a Git based Cookiecutter template into a new project on disk."""
     template_git_url = utils.cookiecutter.resolve_template_url(template_git_url)

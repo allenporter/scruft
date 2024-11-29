@@ -5,11 +5,9 @@ from typing import Optional
 import typer
 
 from . import utils
-from .utils import example
 from .utils.iohelper import AltTemporaryDirectory
 
 
-@example()
 def check(
     project_dir: Path = Path("."), checkout: Optional[str] = None, strict: bool = True
 ) -> bool:

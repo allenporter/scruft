@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 from urllib.parse import urlparse
 
 from cookiecutter.config import get_user_config
@@ -8,9 +8,12 @@ from cookiecutter.generate import generate_context
 from cookiecutter.prompt import prompt_for_config
 from git import GitCommandError, Repo
 
-from scruft.exceptions import InvalidCookiecutterRepository, UnableToFindCookiecutterTemplate
+from scruft.exceptions import (
+    InvalidCookiecutterRepository,
+    UnableToFindCookiecutterTemplate,
+)
 
-CookiecutterContext = Dict[str, Any]
+CookiecutterContext = dict[str, Any]
 
 
 #################################
@@ -41,11 +44,13 @@ def resolve_template_url(url: str) -> str:
 def get_cookiecutter_repo(
     template_git_url: str,
     cookiecutter_template_dir: Path,
-    checkout: Optional[str] = None,
-    **clone_kwargs,
+    checkout: str | None = None,
+    **clone_kwargs: Any,
 ) -> Repo:
     try:
-        repo = Repo.clone_from(template_git_url, cookiecutter_template_dir, **clone_kwargs)
+        repo = Repo.clone_from(
+            template_git_url, cookiecutter_template_dir, **clone_kwargs
+        )
     except GitCommandError as error:
         raise InvalidCookiecutterRepository(
             template_git_url, f"Failed to clone the repo. {error.stderr.strip()}"
@@ -61,8 +66,8 @@ def get_cookiecutter_repo(
     return repo
 
 
-def _validate_cookiecutter(cookiecutter_template_dir: Path):
-    main_cookiecutter_directory: Optional[Path] = None
+def _validate_cookiecutter(cookiecutter_template_dir: Path) -> None:
+    main_cookiecutter_directory: Path | None = None
 
     for dir_item in cookiecutter_template_dir.glob("*cookiecutter.*"):
         if dir_item.is_dir() and "{{" in dir_item.name and "}}" in dir_item.name:
@@ -76,19 +81,20 @@ def _validate_cookiecutter(cookiecutter_template_dir: Path):
 def generate_cookiecutter_context(
     template_git_url: str,
     cookiecutter_template_dir: Path,
-    config_file: Optional[Path] = None,
+    config_file: Path | None = None,
     default_config: bool = False,
-    extra_context: Optional[Dict[str, Any]] = None,
+    extra_context: dict[str, Any] | None = None,
     no_input: bool = False,
 ) -> CookiecutterContext:
     _validate_cookiecutter(cookiecutter_template_dir)
 
     context_file = cookiecutter_template_dir / "cookiecutter.json"
     config_dict = get_user_config(
-        config_file=str(config_file) if config_file else None, default_config=default_config
+        config_file=str(config_file) if config_file else None,
+        default_config=default_config,
     )
 
-    context = generate_context(
+    context: CookiecutterContext = generate_context(
         context_file=context_file,
         default_context=config_dict["default_context"],
         extra_context=extra_context,
@@ -102,7 +108,7 @@ def generate_cookiecutter_context(
     return context
 
 
-def get_extra_context_from_file(extra_context_file: Path) -> Dict[str, Any]:
+def get_extra_context_from_file(extra_context_file: Path) -> dict[str, Any]:
     extra_context = {}
     if extra_context_file.exists():
         with open(extra_context_file, "r") as f:

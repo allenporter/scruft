@@ -3,8 +3,9 @@ import stat
 import sys
 import logging
 from pathlib import Path
+from collections.abc import Callable
 from shutil import move, rmtree
-from typing import Optional, Set, Union
+from typing import Any
 
 from cookiecutter.generate import generate_files
 from git import Repo
@@ -30,8 +31,8 @@ def cookiecutter_template(
     cruft_state: CruftState,
     project_dir: Path = Path("."),
     cookiecutter_input: bool = False,
-    checkout: Optional[str] = None,
-    deleted_paths: Optional[Set[Path]] = None,
+    checkout: str | None = None,
+    deleted_paths: set[Path] | None = None,
     update_deleted_paths: bool = False,
 ) -> CookiecutterContext:
     """Generate a clean cookiecutter template in output_dir."""
@@ -43,7 +44,9 @@ def cookiecutter_template(
     repo.head.reset(commit=commit, working_tree=True)
 
     assert repo.working_dir is not None  # nosec B101 (allow assert for type checking)
-    context = _generate_output(cruft_state, Path(repo.working_dir), cookiecutter_input, output_dir)
+    context = _generate_output(
+        cruft_state, Path(repo.working_dir), cookiecutter_input, output_dir
+    )
 
     # Get all paths that we are supposed to skip before generating the diff and applying updates
     skip_paths = _get_skip_paths(cruft_state, pyproject_file)
@@ -64,7 +67,10 @@ def cookiecutter_template(
 
 
 def _generate_output(
-    cruft_state: CruftState, project_dir: Path, cookiecutter_input: bool, output_dir: Path
+    cruft_state: CruftState,
+    project_dir: Path,
+    cookiecutter_input: bool,
+    output_dir: Path,
 ) -> CookiecutterContext:
     inner_dir = project_dir / (cruft_state.get("directory") or "")
 
@@ -91,7 +97,10 @@ def _generate_output(
 
         # Kindly ask cookiecutter to generate the template
         template_dir = generate_files(
-            repo_dir=inner_dir, context=new_context, overwrite_if_exists=True, output_dir=tmpdir
+            repo_dir=inner_dir,
+            context=new_context,
+            overwrite_if_exists=True,
+            output_dir=tmpdir,
         )
         template_dir = Path(template_dir)
 
@@ -107,10 +116,12 @@ def _generate_output(
 ##############################
 
 
-def _get_skip_paths(cruft_state: CruftState, pyproject_file: Path) -> Set[Path]:
+def _get_skip_paths(cruft_state: CruftState, pyproject_file: Path) -> set[Path]:
     skip_cruft = cruft_state.get("skip", [])
     if tomllib and pyproject_file.is_file():
-        pyproject_cruft = tomllib.loads(pyproject_file.read_text()).get("tool", {}).get("cruft", {})
+        pyproject_cruft = (
+            tomllib.loads(pyproject_file.read_text()).get("tool", {}).get("cruft", {})
+        )
         skip_cruft.extend(pyproject_cruft.get("skip", []))
     elif pyproject_file.is_file():
         _LOGGER.warning(
@@ -120,7 +131,7 @@ def _get_skip_paths(cruft_state: CruftState, pyproject_file: Path) -> Set[Path]:
     return set(map(Path, skip_cruft))
 
 
-def _get_deleted_files(template_dir: Path, project_dir: Path):
+def _get_deleted_files(template_dir: Path, project_dir: Path) -> set[Path]:
     cwd = Path.cwd()
     os.chdir(template_dir)
     template_paths = set(Path(".").glob("**/*"))
@@ -131,21 +142,21 @@ def _get_deleted_files(template_dir: Path, project_dir: Path):
     return deleted_paths
 
 
-def _remove_readonly(func, path, _):  # pragma: no cov_4_nix
+def _remove_readonly(
+    func: Callable[..., Any], path: str, _: Any
+) -> None:  # pragma: no cov_4_nix
     """Clear the readonly bit and reattempt the removal."""
     os.chmod(path, stat.S_IWRITE)  # WINDOWS
     func(path)
 
 
-def _remove_single_path(path: Path):
+def _remove_single_path(path: Path) -> None:
     if path.is_dir():
         try:
             rmtree(path, ignore_errors=False, onerror=_remove_readonly)
         except Exception:  # pragma: no cover
             raise Exception("Failed to remove directory.")
-        # rmtree(path)
     elif path.is_file():
-        # path.unlink()
         try:
             path.unlink()
         except PermissionError:  # pragma: no cov_4_nix
@@ -155,16 +166,14 @@ def _remove_single_path(path: Path):
             raise Exception("Failed to remove file.") from exc
 
 
-def _remove_paths(root: Path, paths_to_remove: Set[Union[Path, str]]):
+def _remove_paths(root: Path, paths_to_remove: set[Path | str]) -> None:
     # There is some redundancy here in chmoding dirs and/or files differently.
     abs_paths_to_remove = []
     for path_to_remove in paths_to_remove:
         if isinstance(path_to_remove, Path):
             abs_paths_to_remove.append(root / path_to_remove)
-        elif isinstance(path_to_remove, str):  # assumes the string is a glob-pattern
-            abs_paths_to_remove += list(root.glob(path_to_remove))
         else:
-            _LOGGER.warning("%s is not a Path object or a string glob-pattern", path_to_remove)
+            abs_paths_to_remove += list(root.glob(path_to_remove))
 
     for path in abs_paths_to_remove:
         _remove_single_path(path)

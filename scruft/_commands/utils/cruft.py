@@ -1,12 +1,12 @@
 import json
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 from git import Repo
 
 from scruft.exceptions import CruftAlreadyPresent, NoCruftFound
 
-CruftState = Dict[str, Any]
+CruftState = dict[str, Any]
 
 
 #######################
@@ -36,6 +36,6 @@ def is_project_updated(repo: Repo, current_commit: str, latest_commit: str, stri
     )
 
 
-def json_dumps(cruft_state: Dict[str, Any]) -> str:
+def json_dumps(cruft_state: dict[str, Any]) -> str:
     text = json.dumps(cruft_state, ensure_ascii=False, indent=2, separators=(",", ": "))
     return text + "\n"

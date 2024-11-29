@@ -1,23 +1,21 @@
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 import typer
 
 from . import utils
-from .utils import example
 from .utils.iohelper import AltTemporaryDirectory
 
 
-@example("https://github.com/timothycrosley/cookiecutter-python/")
 def link(
     template_git_url: str,
     project_dir: Path = Path("."),
-    checkout: Optional[str] = None,
+    checkout: str | None = None,
     no_input: bool = True,
-    config_file: Optional[Path] = None,
+    config_file: Path | None = None,
     default_config: bool = False,
-    extra_context: Optional[Dict[str, Any]] = None,
-    directory: Optional[str] = None,
+    extra_context: dict[str, Any] | None = None,
+    directory: str | None = None,
 ) -> bool:
     """Links an existing project created from a template, to the template it was created from."""
     cruft_file = utils.cruft.get_cruft_file(project_dir, exists=False)

@@ -1,6 +1,6 @@
 """Contains all custom exceptions raised by cruft."""
+
 from pathlib import Path
-from typing import Union
 
 from click import ClickException
 
@@ -12,27 +12,31 @@ class CruftError(ClickException):
 class UnableToFindCookiecutterTemplate(CruftError):
     """Raised when Cruft is unable to find a cookiecutter template."""
 
-    def __init__(self, directory: Union[str, Path]):
+    def __init__(self, directory: str | Path):
         if not isinstance(directory, str):
             directory = str(directory)
-        super().__init__(f"Was unable to locate a Cookiecutter template in `{directory}` !")
+        super().__init__(
+            f"Was unable to locate a Cookiecutter template in `{directory}` !"
+        )
         self.directory = directory
 
 
 class NoCruftFound(CruftError):
     """Raised when no .cruft.json state is found in the current directory."""
 
-    def __init__(self, directory: Union[str, Path]):
+    def __init__(self, directory: str | Path):
         if not isinstance(directory, str):
             directory = str(directory)
-        super().__init__(f"Was unable to locate a `.cruft.json` state file in `{directory}` !")
+        super().__init__(
+            f"Was unable to locate a `.cruft.json` state file in `{directory}` !"
+        )
         self.directory = directory
 
 
 class CruftAlreadyPresent(CruftError):
     """Raised when there is an attempt to create a new .cruft.json file but one already exists."""
 
-    def __init__(self, file_location: Union[str, Path]):
+    def __init__(self, file_location: str | Path):
         if not isinstance(file_location, str):
             file_location = str(file_location)
         super().__init__(f"`.cruft.json` is already defined at `{file_location}` !")
@@ -52,7 +56,7 @@ class InvalidCookiecutterRepository(CruftError):
 class ChangesetUnicodeError(CruftError):
     """Raised when `cruft update` is unable to generate the change"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             (
                 "Unable to interpret changes between current project and cookiecutter template as "

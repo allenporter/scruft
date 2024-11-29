@@ -2,6 +2,7 @@
 exclude = [
   "setup.py",
   "venv/",
+  "tests",
 ]
 platform = "linux"
 show_error_codes = true

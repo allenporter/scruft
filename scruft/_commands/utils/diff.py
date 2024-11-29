@@ -1,7 +1,6 @@
 from pathlib import Path
 from re import sub
 from subprocess import PIPE, run  # nosec
-from typing import List
 
 from scruft import exceptions
 
@@ -9,7 +8,7 @@ DIFF_SRC_PREFIX = "upstream-template-old"
 DIFF_DST_PREFIX = "upstream-template-new"
 
 
-def _git_diff(*args: str) -> List[str]:
+def _git_diff(*args: str) -> list[str]:
     # https://git-scm.com/docs/git-diff#Documentation/git-diff.txt---binary support for binary patch
     return [
         "git",
@@ -68,6 +67,6 @@ def get_diff(repo0: Path, repo1: Path) -> str:
     return diff
 
 
-def display_diff(repo0: Path, repo1: Path):
+def display_diff(repo0: Path, repo1: Path) -> None:
     """Displays the diff between two repositories."""
     run(_git_diff(repo0.as_posix(), repo1.as_posix()))

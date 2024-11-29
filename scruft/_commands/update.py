@@ -1,29 +1,26 @@
 import json
 from pathlib import Path
 from subprocess import DEVNULL, PIPE, CalledProcessError, run  # nosec
-from typing import Any, Dict, Optional, Set
+from typing import Any
 
 import click
 import typer
 
 from . import utils
-from .utils import example
 from .utils.iohelper import AltTemporaryDirectory
 
 
-@example(skip_apply_ask=False)
-@example()
 def update(
     project_dir: Path = Path("."),
     cookiecutter_input: bool = False,
     refresh_private_variables: bool = False,
     skip_apply_ask: bool = True,
     skip_update: bool = False,
-    checkout: Optional[str] = None,
+    checkout: str | None = None,
     strict: bool = True,
     allow_untracked_files: bool = False,
-    extra_context: Optional[Dict[str, Any]] = None,
-    extra_context_file: Optional[Path] = None,
+    extra_context: dict[str, Any] | None = None,
+    extra_context_file: Path | None = None,
 ) -> bool:
     """Update specified project's cruft to the latest and greatest release."""
     cruft_file = utils.cruft.get_cruft_file(project_dir)
@@ -72,7 +69,7 @@ def update(
         repo_dir = tmpdir / "repo"
         current_template_dir = tmpdir / "current_template"
         new_template_dir = tmpdir / "new_template"
-        deleted_paths: Set[Path] = set()
+        deleted_paths: set[Path] = set()
         # Clone the template
         with utils.cookiecutter.get_cookiecutter_repo(
             cruft_state["template"], repo_dir, checkout
@@ -82,9 +79,12 @@ def update(
             # Bail early if the repo is already up to date and no inputs are asked
             if not (
                 extra_context or cookiecutter_input or refresh_private_variables
-            ) and utils.cruft.is_project_updated(repo, cruft_state["commit"], last_commit, strict):
+            ) and utils.cruft.is_project_updated(
+                repo, cruft_state["commit"], last_commit, strict
+            ):
                 typer.secho(
-                    "Nothing to do, project's cruft is already up to date!", fg=typer.colors.GREEN
+                    "Nothing to do, project's cruft is already up to date!",
+                    fg=typer.colors.GREEN,
                 )
                 return True
 
@@ -147,7 +147,7 @@ def update(
         return True
 
 
-def _clean_cookiecutter_private_variables(cruft_state: dict):
+def _clean_cookiecutter_private_variables(cruft_state: dict) -> None:
     for key in list(cruft_state["context"]["cookiecutter"].keys()):
         if key != "_template" and key.startswith("_"):
             del cruft_state["context"]["cookiecutter"][key]
@@ -158,26 +158,31 @@ def _clean_cookiecutter_private_variables(cruft_state: dict):
 #################################################
 
 
-def _is_git_repo(directory: Path):
+def _is_git_repo(directory: Path) -> bool:
     # Taken from https://stackoverflow.com/a/16925062
     # This works even if we are in a sub folder in a git
     # repo
     output = run(
-        ["git", "rev-parse", "--is-inside-work-tree"], stdout=PIPE, stderr=DEVNULL, cwd=directory
+        ["git", "rev-parse", "--is-inside-work-tree"],
+        stdout=PIPE,
+        stderr=DEVNULL,
+        cwd=directory,
     )
     if b"true" in output.stdout:
         return True
     return False
 
 
-def _has_untracked_file(status_line: str):
+def _has_untracked_file(status_line: str) -> bool:
     return status_line.strip().startswith("??")
 
 
-def _is_project_repo_clean(directory: Path, allow_untracked_files: bool):
+def _is_project_repo_clean(directory: Path, allow_untracked_files: bool) -> bool:
     if not _is_git_repo(directory):
         return True
-    git_status = run(["git", "status", "--porcelain"], stdout=PIPE, stderr=DEVNULL, cwd=directory)
+    git_status = run(
+        ["git", "status", "--porcelain"], stdout=PIPE, stderr=DEVNULL, cwd=directory
+    )
     status_lines = git_status.stdout.decode("utf-8").split("\n")
     # remove empty string from trailing newline
     status_lines = [line for line in status_lines if line]
@@ -188,7 +193,7 @@ def _is_project_repo_clean(directory: Path, allow_untracked_files: bool):
     return True
 
 
-def _apply_patch_with_rejections(diff: str, expanded_dir_path: Path):
+def _apply_patch_with_rejections(diff: str, expanded_dir_path: Path) -> None:
     offset = _get_offset(expanded_dir_path)
 
     git_apply = ["git", "apply", "--reject"]
@@ -215,7 +220,9 @@ def _apply_patch_with_rejections(diff: str, expanded_dir_path: Path):
         )
 
 
-def _apply_three_way_patch(diff: str, expanded_dir_path: Path, allow_untracked_files: bool):
+def _apply_three_way_patch(
+    diff: str, expanded_dir_path: Path, allow_untracked_files: bool
+) -> None:
     offset = _get_offset(expanded_dir_path)
 
     git_apply = ["git", "apply", "-3"]
@@ -241,7 +248,7 @@ def _apply_three_way_patch(diff: str, expanded_dir_path: Path, allow_untracked_f
             _apply_patch_with_rejections(diff, expanded_dir_path)
 
 
-def _get_offset(expanded_dir_path: Path):
+def _get_offset(expanded_dir_path: Path) -> str:
     try:
         offset = (
             run(
@@ -262,7 +269,7 @@ def _get_offset(expanded_dir_path: Path):
             raise error
 
 
-def _apply_patch(diff: str, expanded_dir_path: Path, allow_untracked_files: bool):
+def _apply_patch(diff: str, expanded_dir_path: Path, allow_untracked_files: bool) -> None:
     # Git 3 way merge is the our best bet
     # at applying patches. But it only works
     # with git repos. If the repo is not a git dir

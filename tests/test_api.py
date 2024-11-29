@@ -6,12 +6,15 @@ from pathlib import Path
 from subprocess import run
 
 import pytest
-from examples import verify_and_test_examples
 from git import Repo
 
 import scruft
 from scruft import exceptions
 from scruft._commands import utils
+
+TEST_PYTHON_REPO = "https://github.com/timothycrosley/cookiecutter-python"
+TEST_CRUFT_REPO = "https://github.com/timothycrosley/cruft"
+TEST_COOKIECUTTER_REPO = "https://github.com/cruft/cookiecutter-test"
 
 
 def test_invalid_cookiecutter_repo(tmpdir):
@@ -21,32 +24,32 @@ def test_invalid_cookiecutter_repo(tmpdir):
 
 def test_invalid_cookiecutter_reference(tmpdir):
     with pytest.raises(exceptions.InvalidCookiecutterRepository):
-        scruft.create("https://github.com/cruft/cookiecutter-test", Path(tmpdir), checkout="invalid-reference")
+        scruft.create(TEST_COOKIECUTTER_REPO, Path(tmpdir), checkout="invalid-reference")
 
 
 def test_no_cookiecutter_dir(tmpdir):
     with pytest.raises(exceptions.UnableToFindCookiecutterTemplate):
-        scruft.create("https://github.com/cruft/cookiecutter-test", Path(tmpdir))
+        scruft.create(TEST_COOKIECUTTER_REPO, Path(tmpdir))
 
 
-def test_create_examples(tmpdir):
+def test_create(tmpdir):
     tmpdir.chdir()
-    verify_and_test_examples(scruft.create)
+    scruft.create(TEST_PYTHON_REPO)
 
 
-def test_check_examples(tmpdir, project_dir):
+def test_check(tmpdir, project_dir):
     tmpdir.chdir()
     with pytest.raises(exceptions.NoCruftFound):
-        verify_and_test_examples(scruft.check)
+        scruft.check()
 
     os.chdir(project_dir)
-    verify_and_test_examples(scruft.check)
+    scruft.check()
 
 
 def test_create_with_skips(tmpdir):
     tmpdir.chdir()
     skips = ["setup.cfg"]
-    scruft.create("https://github.com/timothycrosley/cookiecutter-python", Path(tmpdir), skip=skips)
+    scruft.create(TEST_PYTHON_REPO, Path(tmpdir), skip=skips)
 
     assert json.load((tmpdir / "python_project_name" / ".cruft.json").open("r"))["skip"] == skips
 
@@ -56,7 +59,7 @@ def test_create_stores_checkout_value(value, tmpdir):
     tmpdir.chdir()
 
     scruft.create(
-        "https://github.com/timothycrosley/cookiecutter-python", Path(tmpdir), checkout=value
+        TEST_PYTHON_REPO, Path(tmpdir), checkout=value
     )
 
     assert (
@@ -68,7 +71,7 @@ def test_create_stores_checkout_value(value, tmpdir):
 def test_link_stores_checkout_value(value, tmpdir):
     project_dir = Path(tmpdir)
     scruft.link(
-        "https://github.com/timothycrosley/cookiecutter-python",
+        TEST_PYTHON_REPO,
         project_dir=project_dir,
         checkout=value,
     )
@@ -80,7 +83,7 @@ def test_link_stores_checkout_value(value, tmpdir):
 def test_update_stores_checkout_value(value, tmpdir):
     tmpdir.chdir()
     scruft.create(
-        "https://github.com/timothycrosley/cookiecutter-python",
+        TEST_PYTHON_REPO,
         Path(tmpdir),
         checkout="ea8f733f85e7089df338d41ace199d3f4d397e29",
     )
@@ -93,7 +96,7 @@ def test_update_stores_checkout_value(value, tmpdir):
 
 def test_update_and_check_real_repo(tmpdir):
     tmpdir.chdir()
-    repo = Repo.clone_from("https://github.com/timothycrosley/cruft", str(tmpdir))
+    repo = Repo.clone_from(TEST_CRUFT_REPO, str(tmpdir))
     repo.head.reset(commit="86a6e6beda8095690414ff7652c15b7ae36e6128", working_tree=True)
     with open(os.path.join(tmpdir, ".cruft.json")) as cruft_file:
         cruft_state = json.load(cruft_file)
@@ -123,7 +126,7 @@ def test_update_and_check_real_repo(tmpdir):
 
 def test_update_allows_untracked_files_option(tmpdir):
     tmpdir.chdir()
-    Repo.clone_from("https://github.com/timothycrosley/cruft", str(tmpdir))
+    Repo.clone_from(TEST_CRUFT_REPO, str(tmpdir))
     with open(os.path.join(tmpdir, "untracked.txt"), "w") as new_file:
         new_file.write("hello, world!\n")
     repo_dir = Path(tmpdir)
@@ -136,34 +139,34 @@ def test_update_allows_untracked_files_option(tmpdir):
 def test_relative_repo_check(tmpdir):
     tmpdir.chdir()
     temp_dir = Path(tmpdir)
-    Repo.clone_from("https://github.com/cruft/cookiecutter-test", str(temp_dir / "cc"))
+    Repo.clone_from(TEST_COOKIECUTTER_REPO, str(temp_dir / "cc"))
     project_dir = scruft.create("./cc", output_dir=str(temp_dir / "output"), directory="dir")
     assert scruft.check(project_dir)
 
 
-def test_update_examples(project_dir, tmpdir):
+def test_update(project_dir, tmpdir):
     tmpdir.chdir()
     with pytest.raises(exceptions.NoCruftFound):
-        verify_and_test_examples(scruft.update)
+        scruft.update(skip_apply_ask=False)
 
     os.chdir(project_dir)
-    verify_and_test_examples(scruft.update)
+    scruft.update(skip_apply_ask=False)
 
 
-def test_link_examples(project_dir, tmpdir):
+def test_link(project_dir, tmpdir):
     os.chdir(project_dir)
     with pytest.raises(exceptions.CruftAlreadyPresent):
-        verify_and_test_examples(scruft.link)
+        scruft.link(TEST_PYTHON_REPO)
 
     tmpdir.chdir()
-    Repo.clone_from("https://github.com/timothycrosley/cruft", str(tmpdir))
+    Repo.clone_from(TEST_CRUFT_REPO, str(tmpdir))
     os.remove(os.path.join(tmpdir, ".cruft.json"))
-    verify_and_test_examples(scruft.link)
+    scruft.link(TEST_PYTHON_REPO)
 
 
 def test_directory_and_checkout(tmpdir):
     output_path = scruft.create(
-        "https://github.com/cruft/cookiecutter-test",
+        TEST_COOKIECUTTER_REPO,
         output_dir=Path(tmpdir),
         directory="dir",
         checkout="initial",
@@ -177,7 +180,7 @@ def test_directory_and_checkout(tmpdir):
     cruft_file.unlink()
     assert not cruft_file.exists()
     assert scruft.link(
-        "https://github.com/cruft/cookiecutter-test",
+        TEST_COOKIECUTTER_REPO,
         project_dir=output_path,
         directory="dir",
         checkout="updated",
@@ -202,7 +205,7 @@ def test_diff_has_diff(
     exit_code, isatty, expect_reproducible_diff, expected_return_value, capfd, tmpdir
 ):
     project_dir = scruft.create(
-        "https://github.com/cruft/cookiecutter-test", Path(tmpdir), directory="dir", checkout="diff"
+        TEST_COOKIECUTTER_REPO, Path(tmpdir), directory="dir", checkout="diff"
     )
     (project_dir / "file0").write_text("new content 0\n")
     (project_dir / "dir0/file1").write_text("new content 1\n")
@@ -255,7 +258,7 @@ index be6a56b..1fc03a9 100644
 @pytest.mark.parametrize("exit_code", [(False,), (True,)])
 def test_diff_no_diff(exit_code, capfd, tmpdir):
     project_dir = scruft.create(
-        "https://github.com/cruft/cookiecutter-test", Path(tmpdir), directory="dir", checkout="diff"
+        TEST_COOKIECUTTER_REPO, Path(tmpdir), directory="dir", checkout="diff"
     )
 
     assert scruft.diff(project_dir, exit_code=exit_code) is True
@@ -270,7 +273,7 @@ def test_diff_no_diff(exit_code, capfd, tmpdir):
 
 def test_diff_checkout(capfd, tmpdir):
     project_dir = scruft.create(
-        "https://github.com/samj1912/cookiecutter-test",
+        TEST_COOKIECUTTER_REPO,
         Path(tmpdir),
         directory="dir",
         checkout="master",
@@ -292,11 +295,11 @@ def test_diff_checkout(capfd, tmpdir):
 def test_diff_git_subdir(capfd, tmpdir):
     tmpdir.chdir()
     temp_dir = Path(tmpdir)
-    Repo.clone_from("https://github.com/cruft/cookiecutter-test", temp_dir)
+    Repo.clone_from(TEST_COOKIECUTTER_REPO, temp_dir)
 
     # Create something deeper in the git tree
     project_dir = scruft.create(
-        "https://github.com/cruft/cookiecutter-test",
+        TEST_COOKIECUTTER_REPO,
         Path("tmpdir/foo/bar"),
         directory="dir",
         checkout="master",
