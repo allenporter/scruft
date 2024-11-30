@@ -354,7 +354,7 @@ def test_update_not_strict(cruft_runner, cookiecutter_dir_updated):
         ["update", "--project-dir", cookiecutter_dir_updated.as_posix(), "--not-strict"]
     )
     assert result.exit_code == 0
-    assert "Nothing to do, repo is already up to date" in result.stdout
+    assert "Nothing to do, project is already up to date" in result.stdout
 
 
 def test_update_strict(cruft_runner, cookiecutter_dir_updated):

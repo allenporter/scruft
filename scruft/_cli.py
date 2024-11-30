@@ -246,7 +246,7 @@ def update(
         False,
         "--allow-untracked-files",
         help=(
-            "Allow the project's cruft to be updated if there are untracked files in the git"
+            "Allow the project to be updated if there are untracked files in the git"
             " repository (but no other changes)"
         ),
     ),
