@@ -225,7 +225,7 @@ def _apply_three_way_patch(
 ) -> None:
     offset = _get_offset(expanded_dir_path)
 
-    git_apply = ["git", "apply", "-3"]
+    git_apply = ["git", "apply", "-3", "--ignore-whitespace", "--ignore-space-change"]
     if offset:
         git_apply.extend(["--directory", offset])
 
