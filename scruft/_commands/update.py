@@ -22,7 +22,7 @@ def update(
     extra_context: dict[str, Any] | None = None,
     extra_context_file: Path | None = None,
 ) -> bool:
-    """Update specified project's cruft to the latest and greatest release."""
+    """Update specified project  to the latest and greatest release."""
     cruft_file = utils.cruft.get_cruft_file(project_dir)
 
     if extra_context_file:
@@ -83,7 +83,7 @@ def update(
                 repo, cruft_state["commit"], last_commit, strict
             ):
                 typer.secho(
-                    "Nothing to do, project's cruft is already up to date!",
+                    "Nothing to do, project is already up to date!",
                     fg=typer.colors.GREEN,
                 )
                 return True
@@ -141,7 +141,7 @@ def update(
             cruft_state["context"] = new_context
             cruft_file.write_text(utils.cruft.json_dumps(cruft_state))
             typer.secho(
-                "Good work! Project's cruft has been updated and is as clean as possible!",
+                "Project updated.",
                 fg=typer.colors.GREEN,
             )
         return True
@@ -269,7 +269,9 @@ def _get_offset(expanded_dir_path: Path) -> str:
             raise error
 
 
-def _apply_patch(diff: str, expanded_dir_path: Path, allow_untracked_files: bool) -> None:
+def _apply_patch(
+    diff: str, expanded_dir_path: Path, allow_untracked_files: bool
+) -> None:
     # Git 3 way merge is the our best bet
     # at applying patches. But it only works
     # with git repos. If the repo is not a git dir
