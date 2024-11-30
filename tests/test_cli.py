@@ -269,7 +269,7 @@ def test_update_allow_untracked_files(cruft_runner, cookiecutter_dir):
             "updated",
         ]
     )
-    assert "cruft has been updated" in result.stdout
+    assert "Project updated." in result.stdout
     assert result.exit_code == 0
 
 
@@ -277,7 +277,7 @@ def test_update(cruft_runner, cookiecutter_dir):
     result = cruft_runner(
         ["update", "--project-dir", cookiecutter_dir.as_posix(), "-y", "-c", "updated"]
     )
-    assert "cruft has been updated" in result.stdout
+    assert "Project updated." in result.stdout
     assert result.exit_code == 0
 
 
@@ -287,7 +287,7 @@ def test_update_with_conflicts(cruft_runner, cookiecutter_dir):
     result = cruft_runner(
         ["update", "--project-dir", cookiecutter_dir.as_posix(), "-y", "-c", "updated"]
     )
-    assert "cruft has been updated" in result.stdout
+    assert "Project updated." in result.stdout
     assert "Project directory may have *.rej files" in result.stdout
     assert result.exit_code == 0
     assert set(cookiecutter_dir.glob("**/*.rej"))
@@ -315,7 +315,7 @@ def test_update_with_conflicts_with_git(cruft_runner, cookiecutter_dir):
     result = cruft_runner(
         ["update", "--project-dir", cookiecutter_dir.as_posix(), "-y", "-c", "updated"]
     )
-    assert "cruft has been updated" in result.stdout
+    assert "Project updated." in result.stdout
     assert result.exit_code == 0
     assert set(cookiecutter_dir.glob("**/*.rej"))
     assert "Project directory may have *.rej files" in result.stdout
@@ -337,7 +337,7 @@ def test_update_interactive_skip(cruft_runner, cookiecutter_dir):
         input="s\n",
     )
     assert result.exit_code == 0
-    assert "cruft has been updated" in result.stdout
+    assert "Project updated." in result.stdout
 
 
 def test_update_interactive_view(cruft_runner, cookiecutter_dir):
@@ -346,7 +346,7 @@ def test_update_interactive_view(cruft_runner, cookiecutter_dir):
         input="v\ny\n",
     )
     assert result.exit_code == 0
-    assert "cruft has been updated" in result.stdout
+    assert "Project updated." in result.stdout
 
 
 def test_update_not_strict(cruft_runner, cookiecutter_dir_updated):
@@ -362,7 +362,7 @@ def test_update_strict(cruft_runner, cookiecutter_dir_updated):
         ["update", "--project-dir", cookiecutter_dir_updated.as_posix(), "-y"]
     )
     assert result.exit_code == 0
-    assert "cruft has been updated" in result.stdout
+    assert "Project updated." in result.stdout
 
 
 def test_update_when_new_file(cruft_runner, cookiecutter_dir):
@@ -372,7 +372,7 @@ def test_update_when_new_file(cruft_runner, cookiecutter_dir):
     )
     assert result.exit_code == 0
     assert (cookiecutter_dir / "new-file").exists()
-    assert "cruft has been updated" in result.stdout
+    assert "Project updated." in result.stdout
 
 
 def test_update_when_file_moved(cruft_runner, cookiecutter_dir):
@@ -383,7 +383,7 @@ def test_update_when_file_moved(cruft_runner, cookiecutter_dir):
     assert result.exit_code == 0
     assert (cookiecutter_dir / "NEW-README.md").exists()
     assert not (cookiecutter_dir / "README.md").exists()
-    assert "cruft has been updated" in result.stdout
+    assert "Project updated." in result.stdout
 
 
 def test_update_interactive_view_no_changes(cruft_runner, cookiecutter_dir):
@@ -393,7 +393,7 @@ def test_update_interactive_view_no_changes(cruft_runner, cookiecutter_dir):
     )
     assert result.exit_code == 0
     assert "There are no changes" in result.stdout
-    assert "cruft has been updated" in result.stdout
+    assert "Project updated." in result.stdout
 
 
 def test_update_interactive_view_no_changes_when_deleted(
@@ -407,7 +407,7 @@ def test_update_interactive_view_no_changes_when_deleted(
     )
     assert result.exit_code == 0
     assert "There are no changes" in result.stdout
-    assert "cruft has been updated" in result.stdout
+    assert "Project updated." in result.stdout
 
 
 def test_update_same_commit_but_ask_for_input(cruft_runner, cookiecutter_dir_input):
@@ -423,7 +423,7 @@ def test_update_same_commit_but_ask_for_input(cruft_runner, cookiecutter_dir_inp
         ],
         input="\n\n",  # no input changes
     )
-    assert "cruft has been updated" in result.stdout
+    assert "Project updated." in result.stdout
     assert result.exit_code == 0
 
 
@@ -442,7 +442,7 @@ def test_update_with_input_changes(cruft_runner, cookiecutter_dir_input, capfd):
     git_diff_captured = capfd.readouterr()
     assert "-Input from cookiecutter: some-input" in git_diff_captured.out
     assert "+Input from cookiecutter: new-input" in git_diff_captured.out
-    assert "cruft has been updated" in result.stdout
+    assert "Project updated." in result.stdout
     assert result.exit_code == 0
 
 
@@ -467,7 +467,7 @@ def test_update_new_inputs_added_to_template(
         "+New input added from template: new-input-from-template"
         in git_diff_captured.out
     )
-    assert "cruft has been updated" in result.stdout
+    assert "Project updated." in result.stdout
     assert result.exit_code == 0
 
 
@@ -488,7 +488,7 @@ def test_update_refresh_private_variables_from_template(
     git_diff_captured = capfd.readouterr()
     assert "-Private variable: 1.0" in git_diff_captured.out
     assert "+Private variable: 2.0" in git_diff_captured.out
-    assert "cruft has been updated" in result.stdout
+    assert "Project updated." in result.stdout
     assert result.exit_code == 0
 
 
@@ -658,9 +658,9 @@ def test_update_changed_variables(
 
     # validate overall result
     if expecting_updates:
-        assert "cruft has been updated" in result.stdout
+        assert "Project updated." in result.stdout
     else:
-        assert "cruft has been updated" not in result.stdout
+        assert "Project updated." not in result.stdout
         assert "already up to date" in result.stdout
     assert result.exit_code == 0
 
