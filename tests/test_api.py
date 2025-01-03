@@ -275,7 +275,7 @@ def test_diff_checkout(capfd, tmpdir):
         TEST_COOKIECUTTER_REPO,
         Path(tmpdir),
         directory="dir",
-        checkout="master",
+        checkout="main",
     )
 
     assert scruft.diff(project_dir, exit_code=True, checkout="updated") is False
@@ -301,7 +301,7 @@ def test_diff_git_subdir(capfd, tmpdir):
         TEST_COOKIECUTTER_REPO,
         Path("tmpdir/foo/bar"),
         directory="dir",
-        checkout="master",
+        checkout="main",
     )
     # not added & committed
     assert not scruft.update(project_dir)
