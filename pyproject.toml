@@ -1,6 +1,32 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools>=77.0"]
+
+[project]
+name = "scruft"
+version = "0.1.1"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+description = "A tool for managing consistency across repositories."
+readme = "README.md"
+authors = [{ name = "Allen Porter", email = "allen.porter@gmail.com" }]
+requires-python = ">=3.12"
+classifiers = []
+dependencies = [
+  "typer>=0.14.0",
+  "click>=8.1.7",
+  "cookiecutter>=2.6.0",
+  "gitpython>=3.1.43",
+]
+
+[project.urls]
+Source = "https://github.com/allenporter/scruft"
+
+[tool.setuptools.packages.find]
+include = ["scruft*"]
+
 [tool.mypy]
 exclude = [
-  "setup.py",
   "venv/",
   "tests",
 ]
