@@ -33,7 +33,9 @@ def create(
                 cookiecutter_template_dir = cookiecutter_template_dir / directory
 
             if extra_context_file:
-                extra_context = utils.cookiecutter.get_extra_context_from_file(extra_context_file)
+                extra_context = utils.cookiecutter.get_extra_context_from_file(
+                    extra_context_file
+                )
             context = utils.cookiecutter.generate_cookiecutter_context(
                 template_git_url,
                 cookiecutter_template_dir,
@@ -52,7 +54,7 @@ def create(
             )
         )
 
-        cruft_content = {
+        cruft_content: dict[str, Any] = {
             "template": template_git_url,
             "commit": last_commit,
             "checkout": checkout,
