@@ -183,10 +183,10 @@ def test_link_interactive(cruft_runner, cookiecutter_dir):
             "--directory",
             "dir",
         ],
-        input=f"{commit}\n",
+        input=f"{commit}\n\n",
     )
     assert "Link to template at commit" in result.stdout
-    assert result.exit_code == 0
+    assert result.exit_code == 0, result.stdout
 
     # compare the 2 .cruft.json (except for the "project" key)
     cruft_file = utils.cruft.get_cruft_file(cookiecutter_dir)
