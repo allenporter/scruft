@@ -10,7 +10,7 @@ license-files = ["LICENSE"]
 description = "A tool for managing consistency across repositories."
 readme = "README.md"
 authors = [{ name = "Allen Porter", email = "allen.porter@gmail.com" }]
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 classifiers = []
 dependencies = [
   "typer>=0.14.0",
