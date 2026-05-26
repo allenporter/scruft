@@ -18,7 +18,9 @@ def test_get_diff_with_add(tmp_path: Path):
 
     diff = utils.diff.get_diff(repo0, repo1)
 
-    assert diff.startswith("diff --git upstream-template-old/file upstream-template-new/file")
+    assert diff.startswith(
+        "diff --git upstream-template-old/file upstream-template-new/file"
+    )
 
 
 def test_get_diff_with_delete(tmp_path: Path):
@@ -32,7 +34,9 @@ def test_get_diff_with_delete(tmp_path: Path):
 
     diff = utils.diff.get_diff(repo0, repo1)
 
-    assert diff.startswith("diff --git upstream-template-old/file upstream-template-new/file")
+    assert diff.startswith(
+        "diff --git upstream-template-old/file upstream-template-new/file"
+    )
 
 
 def test_get_diff_with_unicode(project_dir):
@@ -103,6 +107,8 @@ def test_warn_if_cant_read_pyproject_toml(monkeypatch, caplog):
 
 
 def test_get_extra_context_from_file():
-    extra_context_file = Path(__file__).parent / "testdata" / "unicode-data" / "extra_context.json"
+    extra_context_file = (
+        Path(__file__).parent / "testdata" / "unicode-data" / "extra_context.json"
+    )
     extra_context = utils.cookiecutter.get_extra_context_from_file(extra_context_file)
     assert extra_context == {"project": "CRUFT-TEST-PROJECT"}

@@ -23,7 +23,9 @@ def get_cruft_file(project_dir_path: Path, exists: bool = True) -> Path:
     return cruft_file
 
 
-def is_project_updated(repo: Repo, current_commit: str, latest_commit: str, strict: bool) -> bool:
+def is_project_updated(
+    repo: Repo, current_commit: str, latest_commit: str, strict: bool
+) -> bool:
     return (
         # If the latest commit exactly matches the current commit
         latest_commit == current_commit
@@ -31,7 +33,8 @@ def is_project_updated(repo: Repo, current_commit: str, latest_commit: str, stri
         or not repo.index.diff(current_commit)
         # or if the strict flag is off, we allow for newer commits to count as up to date
         or (
-            repo.is_ancestor(repo.commit(latest_commit), repo.commit(current_commit)) and not strict
+            repo.is_ancestor(repo.commit(latest_commit), repo.commit(current_commit))
+            and not strict
         )
     )
 

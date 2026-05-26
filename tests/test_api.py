@@ -23,7 +23,9 @@ def test_invalid_cookiecutter_repo(tmpdir):
 
 def test_invalid_cookiecutter_reference(tmpdir):
     with pytest.raises(exceptions.InvalidCookiecutterRepository):
-        scruft.create(TEST_COOKIECUTTER_REPO, Path(tmpdir), checkout="invalid-reference")
+        scruft.create(
+            TEST_COOKIECUTTER_REPO, Path(tmpdir), checkout="invalid-reference"
+        )
 
 
 def test_no_cookiecutter_dir(tmpdir):
@@ -50,19 +52,23 @@ def test_create_with_skips(tmpdir):
     skips = ["setup.cfg"]
     scruft.create(TEST_PYTHON_REPO, Path(tmpdir), skip=skips)
 
-    assert json.load((tmpdir / "python_project_name" / ".cruft.json").open("r"))["skip"] == skips
+    assert (
+        json.load((tmpdir / "python_project_name" / ".cruft.json").open("r"))["skip"]
+        == skips
+    )
 
 
 @pytest.mark.parametrize("value", ["main", None])
 def test_create_stores_checkout_value(value, tmpdir):
     tmpdir.chdir()
 
-    scruft.create(
-        TEST_PYTHON_REPO, Path(tmpdir), checkout=value
-    )
+    scruft.create(TEST_PYTHON_REPO, Path(tmpdir), checkout=value)
 
     assert (
-        json.load((tmpdir / "python_project_name" / ".cruft.json").open("r"))["checkout"] == value
+        json.load((tmpdir / "python_project_name" / ".cruft.json").open("r"))[
+            "checkout"
+        ]
+        == value
     )
 
 
@@ -75,7 +81,10 @@ def test_link_stores_checkout_value(value, tmpdir):
         checkout=value,
     )
 
-    assert json.load(utils.cruft.get_cruft_file(project_dir).open("r"))["checkout"] == value
+    assert (
+        json.load(utils.cruft.get_cruft_file(project_dir).open("r"))["checkout"]
+        == value
+    )
 
 
 @pytest.mark.parametrize("value", ["main", None])
@@ -96,7 +105,9 @@ def test_update_stores_checkout_value(value, tmpdir):
 def test_update_and_check_real_repo(tmpdir):
     tmpdir.chdir()
     repo = Repo.clone_from(TEST_CRUFT_REPO, str(tmpdir))
-    repo.head.reset(commit="86a6e6beda8095690414ff7652c15b7ae36e6128", working_tree=True)
+    repo.head.reset(
+        commit="86a6e6beda8095690414ff7652c15b7ae36e6128", working_tree=True
+    )
     with open(os.path.join(tmpdir, ".cruft.json")) as cruft_file:
         cruft_state = json.load(cruft_file)
         cruft_state["skip"] = ["cruft/__init__.py", "tests"]
@@ -139,7 +150,9 @@ def test_relative_repo_check(tmpdir):
     tmpdir.chdir()
     temp_dir = Path(tmpdir)
     Repo.clone_from(TEST_COOKIECUTTER_REPO, str(temp_dir / "cc"))
-    project_dir = scruft.create("./cc", output_dir=str(temp_dir / "output"), directory="dir")
+    project_dir = scruft.create(
+        "./cc", output_dir=str(temp_dir / "output"), directory="dir"
+    )
     assert scruft.check(project_dir)
 
 
