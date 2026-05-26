@@ -56,7 +56,7 @@ def cookiecutter_dir_hooked_git(tmpdir):
 def cookiecutter_dir_input(tmpdir):
     yield Path(
         scruft.create(
-            "https://github.com/gmsantos/cookiecutter-test",
+            "https://github.com/cruft/cookiecutter-test",
             Path(tmpdir),
             directory="dir",
             checkout="input",
@@ -494,7 +494,7 @@ def test_update_refresh_private_variables_from_template(
 
 def make_cruft_file_content(context):
     return {
-        "template": "https://github.com/gmsantos/cookiecutter-test",
+        "template": "https://github.com/cruft/cookiecutter-test",
         "commit": "ab2e492522eddb65c44c2848d6de074ba977b1ac",
         "checkout": "input",
         "context": {
@@ -543,7 +543,7 @@ def make_cruft_file_content(context):
         pytest.param(
             (
                 {
-                    "template": "https://github.com/gmsantos/cookiecutter-test",
+                    "template": "https://github.com/cruft/cookiecutter-test",
                     "commit": "ab2e492522eddb65c44c2848d6de074ba977b1ac",
                     "checkout": "input",
                     "directory": "dir",

@@ -1,4 +1,5 @@
 """This module defines CLI interactions when using `cruft`."""
+
 import json
 from pathlib import Path
 from typing import Any, Optional
@@ -9,7 +10,9 @@ import typer
 from scruft import _commands
 from scruft._version import __version__
 
-app = typer.Typer(help=f"Scruft {__version__}", no_args_is_help=True, add_completion=False)
+app = typer.Typer(
+    help=f"Scruft {__version__}", no_args_is_help=True, add_completion=False
+)
 
 
 def _get_help_string(function: Callable[[Any], Any]) -> str:
@@ -22,7 +25,11 @@ def _get_help_string(function: Callable[[Any], Any]) -> str:
 )
 def check(
     project_dir: Path = typer.Option(
-        Path("."), "--project-dir", "-p", help="Path to the project directory.", show_default=False
+        Path("."),
+        "--project-dir",
+        "-p",
+        help="Path to the project directory.",
+        show_default=False,
     ),
     checkout: Optional[str] = typer.Option(
         None,
@@ -100,7 +107,9 @@ def create(
         None,
         "--checkout",
         "-c",
-        help=("The git reference to check against. Supports branches, tags and commit hashes."),
+        help=(
+            "The git reference to check against. Supports branches, tags and commit hashes."
+        ),
     ),
     overwrite_if_exists: bool = typer.Option(
         False,
@@ -110,7 +119,10 @@ def create(
         help="Overwrite the contents of the output directory if it already exists",
     ),
     skip: Optional[list[str]] = typer.Option(
-        None, "--skip", show_default=False, help="Default files/pattern to skip on update"
+        None,
+        "--skip",
+        show_default=False,
+        help="Default files/pattern to skip on update",
     ),
 ) -> None:
     _commands.create(
@@ -137,13 +149,19 @@ def link(
         ..., metavar="TEMPLATE", help="The Cookiecutter template URI."
     ),
     project_dir: Path = typer.Option(
-        Path("."), "--project-dir", "-p", help="Path to the project directory.", show_default=False
+        Path("."),
+        "--project-dir",
+        "-p",
+        help="Path to the project directory.",
+        show_default=False,
     ),
     checkout: Optional[str] = typer.Option(
         None,
         "--checkout",
         "-c",
-        help=("The git reference to check against. Supports branches, tags and commit hashes."),
+        help=(
+            "The git reference to check against. Supports branches, tags and commit hashes."
+        ),
     ),
     no_input: bool = typer.Option(
         False,
@@ -152,7 +170,7 @@ def link(
         help="Do not prompt for commit hash. Use latest commit of checked out reference instead.",
         show_default=False,
     ),
-    config_file: Optional[Path]= typer.Option(
+    config_file: Optional[Path] = typer.Option(
         None, help="Path to the Cookiecutter user config file", exists=True
     ),
     default_config: bool = typer.Option(
@@ -194,7 +212,11 @@ def link(
 )
 def update(
     project_dir: Path = typer.Option(
-        Path("."), "--project-dir", "-p", help="Path to the project directory.", show_default=False
+        Path("."),
+        "--project-dir",
+        "-p",
+        help="Path to the project directory.",
+        show_default=False,
     ),
     cookiecutter_input: bool = typer.Option(
         False,
@@ -228,7 +250,9 @@ def update(
         None,
         "--checkout",
         "-c",
-        help=("The git reference to check against. Supports branches, tags and commit hashes."),
+        help=(
+            "The git reference to check against. Supports branches, tags and commit hashes."
+        ),
     ),
     strict: bool = typer.Option(
         True,
@@ -301,17 +325,29 @@ def update(
 )
 def diff(
     project_dir: Path = typer.Option(
-        Path("."), "--project-dir", "-p", help="Path to the project directory.", show_default=False
+        Path("."),
+        "--project-dir",
+        "-p",
+        help="Path to the project directory.",
+        show_default=False,
     ),
     exit_code: bool = typer.Option(
-        False, "--exit-code", "-e", help="Exit with status 1 on non-empty diff.", show_default=False
+        False,
+        "--exit-code",
+        "-e",
+        help="Exit with status 1 on non-empty diff.",
+        show_default=False,
     ),
     checkout: Optional[str] = typer.Option(
         None,
         "--checkout",
         "-c",
-        help=("The git reference to check against. Supports branches, tags and commit hashes."),
+        help=(
+            "The git reference to check against. Supports branches, tags and commit hashes."
+        ),
     ),
 ) -> None:
-    if not _commands.diff(project_dir=project_dir, exit_code=exit_code, checkout=checkout):
+    if not _commands.diff(
+        project_dir=project_dir, exit_code=exit_code, checkout=checkout
+    ):
         raise typer.Exit(1)

@@ -45,7 +45,9 @@ def link(
                 f"Linking against the commit: {last_commit}"
                 f" which corresponds with the git reference: {checkout}"
             )
-            typer.echo("Press enter to link against this commit or provide an alternative commit.")
+            typer.echo(
+                "Press enter to link against this commit or provide an alternative commit."
+            )
             use_commit = typer.prompt("Link to template at commit", default=last_commit)
 
         cruft_file.write_text(

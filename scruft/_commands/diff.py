@@ -11,7 +11,9 @@ from .utils.iohelper import AltTemporaryDirectory
 
 
 def diff(
-    project_dir: Path = Path("."), exit_code: bool = False, checkout: Optional[str] = None
+    project_dir: Path = Path("."),
+    exit_code: bool = False,
+    checkout: Optional[str] = None,
 ) -> bool:
     """Show the diff between the project and the linked Cookiecutter template"""
     cruft_file = utils.cruft.get_cruft_file(project_dir)
@@ -33,7 +35,6 @@ def diff(
         with utils.cookiecutter.get_cookiecutter_repo(
             cruft_state["template"], repo_dir, checkout=checkout
         ) as repo:
-
             # We generate the template for the revision expected by the project
             utils.generate.cookiecutter_template(
                 output_dir=remote_template_dir,
