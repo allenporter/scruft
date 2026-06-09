@@ -99,7 +99,7 @@ def generate_cookiecutter_context(
     )
 
     context: CookiecutterContext = generate_context(
-        context_file=context_file,
+        context_file=str(context_file),
         default_context=config_dict["default_context"],
         extra_context=extra_context,
     )

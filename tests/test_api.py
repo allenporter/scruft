@@ -150,9 +150,7 @@ def test_relative_repo_check(tmpdir):
     tmpdir.chdir()
     temp_dir = Path(tmpdir)
     Repo.clone_from(TEST_COOKIECUTTER_REPO, str(temp_dir / "cc"))
-    project_dir = scruft.create(
-        "./cc", output_dir=str(temp_dir / "output"), directory="dir"
-    )
+    project_dir = scruft.create("./cc", output_dir=temp_dir / "output", directory="dir")
     assert scruft.check(project_dir)
 
 

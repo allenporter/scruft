@@ -2,7 +2,6 @@ import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from time import sleep
-from typing import Any
 from types import TracebackType
 
 
@@ -32,5 +31,10 @@ class AltTemporaryDirectory:
             sleep(1)
             self.cleanup(cnt + 1)
 
-    def __exit__(self, exc: Exception, value: Any, tb: TracebackType) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
         self.cleanup()

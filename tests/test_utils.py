@@ -1,5 +1,4 @@
 from pathlib import Path
-import logging
 
 import pytest
 
@@ -97,13 +96,6 @@ def test_remove_paths_folder(tmp_path: Path):
     utils.generate._remove_paths(repo0, {"tests", "file"})
     assert not (repo0 / "tests").exists()
     assert not (repo0 / "file").exists()
-
-
-def test_warn_if_cant_read_pyproject_toml(monkeypatch, caplog):
-    monkeypatch.setattr(utils.generate, "tomllib", None)
-    with caplog.at_level(logging.WARNING):
-        utils.generate._get_skip_paths({}, Path(__file__))
-        assert "`toml` package is not installed" in caplog.text
 
 
 def test_get_extra_context_from_file():

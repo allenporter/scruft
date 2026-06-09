@@ -1,7 +1,7 @@
+import logging
 import os
 import stat
-import sys
-import logging
+import tomllib
 from pathlib import Path
 from collections.abc import Callable
 from shutil import move, rmtree
@@ -15,14 +15,6 @@ from .cruft import CruftState
 from .iohelper import AltTemporaryDirectory
 
 _LOGGER = logging.getLogger(__name__)
-
-if not sys.version_info >= (3, 11):
-    try:
-        import toml as tomllib
-    except ImportError:  # pragma: no cover
-        tomllib = None  # type: ignore
-else:
-    import tomllib
 
 
 def cookiecutter_template(
@@ -117,16 +109,11 @@ def _generate_output(
 
 def _get_skip_paths(cruft_state: CruftState, pyproject_file: Path) -> set[Path]:
     skip_cruft = cruft_state.get("skip", [])
-    if tomllib and pyproject_file.is_file():
+    if pyproject_file.is_file():
         pyproject_cruft = (
             tomllib.loads(pyproject_file.read_text()).get("tool", {}).get("cruft", {})
         )
         skip_cruft.extend(pyproject_cruft.get("skip", []))
-    elif pyproject_file.is_file():
-        _LOGGER.warning(
-            "pyproject.toml is present in repo, but python version is < 3.11 and "
-            "`toml` package is not installed. Cruft configuration may be ignored."
-        )
     return set(map(Path, skip_cruft))
 
 
