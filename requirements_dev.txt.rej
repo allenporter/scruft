@@ -1,7 +1,7 @@
 diff a/requirements_dev.txt b/requirements_dev.txt	(rejected hunks)
 @@ -1,6 +1,6 @@
  -e .
- coverage==7.6.8
+ coverage==7.14.1
 -mypy==1.13.0
 +ty==0.0.18
  pdoc==15.0.4
