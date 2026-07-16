@@ -29,7 +29,7 @@ repos:
         language: python
         pass_filenames: false
         additional_dependencies:
-          - ty==0.0.59
+          - ty==0.0.60
   - repo: https://github.com/codespell-project/codespell
     rev: v2.4.3
     hooks:
