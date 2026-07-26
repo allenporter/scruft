@@ -58,8 +58,6 @@ class ChangesetUnicodeError(CruftError):
 
     def __init__(self) -> None:
         super().__init__(
-            (
-                "Unable to interpret changes between current project and cookiecutter template as "
-                "unicode. Typically a result of hidden binary files in project folder."
-            )
+            "Unable to interpret changes between current project and cookiecutter template as "
+            "unicode. Typically a result of hidden binary files in project folder."
         )

@@ -1,6 +1,6 @@
 {
   "template": "http://github.com/allenporter/cookiecutter-python",
-  "commit": "47a481aafe9c60b6301949d509683d8b66da9114",
+  "commit": "13c149b2e537de3d919612d80a0f30753f94520c",
   "checkout": null,
   "context": {
     "cookiecutter": {
@@ -10,8 +10,7 @@
       "project_name": "scruft",
       "description": "A tool for managing consistency across repositories.",
       "version": "0.0.1",
-      "_template": "http://github.com/allenporter/cookiecutter-python",
-      "_commit": "47a481aafe9c60b6301949d509683d8b66da9114"
+      "_template": "http://github.com/allenporter/cookiecutter-python"
     }
   },
   "directory": null

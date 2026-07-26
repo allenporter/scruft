@@ -2,7 +2,6 @@ import json
 import shutil
 import sys
 from pathlib import Path
-from typing import Optional
 
 import typer
 
@@ -13,7 +12,7 @@ from .utils.iohelper import AltTemporaryDirectory
 def diff(
     project_dir: Path = Path("."),
     exit_code: bool = False,
-    checkout: Optional[str] = None,
+    checkout: str | None = None,
 ) -> bool:
     """Show the diff between the project and the linked Cookiecutter template"""
     cruft_file = utils.cruft.get_cruft_file(project_dir)
