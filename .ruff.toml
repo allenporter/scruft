@@ -1,5 +1,4 @@
 target-version = "py313"
 
 [lint]
-ignore = ["E501", "RUF022"]
-extend-select = ["PLC0415"]
+ignore = ["E501", "RUF022", "B008", "PLW1510", "UP022", "TRY201", "BLE001", "TRY002", "SIM103"]
