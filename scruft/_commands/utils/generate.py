@@ -2,8 +2,8 @@ import logging
 import os
 import stat
 import tomllib
-from pathlib import Path
 from collections.abc import Callable
+from pathlib import Path
 from shutil import move, rmtree
 from typing import Any
 

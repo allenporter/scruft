@@ -1,9 +1,9 @@
 """This module defines CLI interactions when using `cruft`."""
 
 import json
-from pathlib import Path
-from typing import Any, Optional
 from collections.abc import Callable
+from pathlib import Path
+from typing import Any
 
 import typer
 
@@ -31,7 +31,7 @@ def check(
         help="Path to the project directory.",
         show_default=False,
     ),
-    checkout: Optional[str] = typer.Option(
+    checkout: str | None = typer.Option(
         None,
         "--checkout",
         "-c",
@@ -66,7 +66,7 @@ def create(
         file_okay=False,
         help="Where to output the generated project dir into",
     ),
-    config_file: Optional[Path] = typer.Option(
+    config_file: Path | None = typer.Option(
         None, help="Path to the Cookiecutter user config file", exists=True
     ),
     default_config: bool = typer.Option(
@@ -81,7 +81,7 @@ def create(
         help="A JSON string describing any extra context to pass to cookiecutter.",
         show_default=False,
     ),
-    extra_context_file: Optional[Path] = typer.Option(
+    extra_context_file: Path | None = typer.Option(
         None,
         "--extra-context-file",
         "-E",
@@ -95,7 +95,7 @@ def create(
         help="Do not prompt for template variables and only use cookiecutter.json file content",
         show_default=False,
     ),
-    directory: Optional[str] = typer.Option(
+    directory: str | None = typer.Option(
         None,
         help=(
             "Directory within repo that holds"
@@ -103,7 +103,7 @@ def create(
             " with multi templates in it"
         ),
     ),
-    checkout: Optional[str] = typer.Option(
+    checkout: str | None = typer.Option(
         None,
         "--checkout",
         "-c",
@@ -118,7 +118,7 @@ def create(
         show_default=False,
         help="Overwrite the contents of the output directory if it already exists",
     ),
-    skip: Optional[list[str]] = typer.Option(
+    skip: list[str] | None = typer.Option(
         None,
         "--skip",
         show_default=False,
@@ -155,7 +155,7 @@ def link(
         help="Path to the project directory.",
         show_default=False,
     ),
-    checkout: Optional[str] = typer.Option(
+    checkout: str | None = typer.Option(
         None,
         "--checkout",
         "-c",
@@ -170,7 +170,7 @@ def link(
         help="Do not prompt for commit hash. Use latest commit of checked out reference instead.",
         show_default=False,
     ),
-    config_file: Optional[Path] = typer.Option(
+    config_file: Path | None = typer.Option(
         None, help="Path to the Cookiecutter user config file", exists=True
     ),
     default_config: bool = typer.Option(
@@ -185,7 +185,7 @@ def link(
         help="A JSON string describing any extra context to pass to cookiecutter.",
         show_default=False,
     ),
-    directory: Optional[str] = typer.Option(
+    directory: str | None = typer.Option(
         None,
         help=(
             "Directory within repo that holds"
@@ -246,7 +246,7 @@ def update(
         help="Skip the template updates but update the cruft state",
         show_default=False,
     ),
-    checkout: Optional[str] = typer.Option(
+    checkout: str | None = typer.Option(
         None,
         "--checkout",
         "-c",
@@ -338,7 +338,7 @@ def diff(
         help="Exit with status 1 on non-empty diff.",
         show_default=False,
     ),
-    checkout: Optional[str] = typer.Option(
+    checkout: str | None = typer.Option(
         None,
         "--checkout",
         "-c",

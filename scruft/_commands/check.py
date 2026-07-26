@@ -1,6 +1,5 @@
 import json
 from pathlib import Path
-from typing import Optional
 
 import typer
 
@@ -9,7 +8,7 @@ from .utils.iohelper import AltTemporaryDirectory
 
 
 def check(
-    project_dir: Path = Path("."), checkout: Optional[str] = None, strict: bool = True
+    project_dir: Path = Path("."), checkout: str | None = None, strict: bool = True
 ) -> bool:
     """Checks to see if there have been any updates to the Cookiecutter template
     used to generate this project."""

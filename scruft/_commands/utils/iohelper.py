@@ -27,7 +27,7 @@ class AltTemporaryDirectory:
             raise RuntimeError("Could not delete TemporaryDirectory!")
         try:
             self.tmpdir.cleanup()
-        except IOError:  # pragma: no cov_4_nix
+        except OSError:  # pragma: no cov_4_nix
             sleep(1)
             self.cleanup(cnt + 1)
 
