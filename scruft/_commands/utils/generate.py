@@ -139,7 +139,7 @@ def _remove_readonly(
 def _remove_single_path(path: Path) -> None:
     if path.is_dir():
         try:
-            rmtree(path, ignore_errors=False, onerror=_remove_readonly)
+            rmtree(path, ignore_errors=False, onexc=_remove_readonly)
         except Exception:  # pragma: no cover
             raise Exception("Failed to remove directory.")
     elif path.is_file():
