@@ -10,4 +10,4 @@ ruff==0.17.0
 
 typer==0.27.3
 cookiecutter==2.7.1
-gitpython==3.2.0
+gitpython==3.2.1
