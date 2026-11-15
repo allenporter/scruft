@@ -62,3 +62,7 @@ ignore_missing_imports = true
 
 [tool.ty.src]
 exclude = ["tests", "examples"]
+
+[tool.coverage.run]
+core = "sysmon"
+disable_warnings = ["no-sysmon"]
