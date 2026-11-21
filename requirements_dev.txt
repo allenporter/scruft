@@ -8,6 +8,6 @@ pytest-cov==7.1.0
 pytest==9.2.0
 ruff==0.17.6
 
-typer==0.28.0
+typer==0.29.2
 cookiecutter==2.7.1
 gitpython==3.2.1
