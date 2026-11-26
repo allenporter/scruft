@@ -302,7 +302,7 @@ def _apply_project_updates(
                 "your project as up-to-date or "
                 'respond with "v" to view the changes that will be applied.'
             )
-            input_str = typer.prompt(
+            input_str = click.prompt(
                 "Apply diff and update?",
                 type=click.Choice(("y", "n", "s", "v")),
                 show_choices=True,
